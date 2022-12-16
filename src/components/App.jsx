@@ -4,22 +4,16 @@ import ContactList from './ContactList';
 import Filter from './Filter';
 
 const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const localContacts = localStorage.getItem('contacts');
+  const parsedLocalContacts = JSON.parse(localContacts);
+
+  const [contacts, setContacts] = useState(
+    parsedLocalContacts ? parsedLocalContacts : []
+  );
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const localContacts = localStorage.getItem('contacts');
-    const parsedLocalContacts = JSON.parse(localContacts);
-
-    if (parsedLocalContacts) {
-      setContacts(parsedLocalContacts);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (contacts.length) {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-    }
+    localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   const formSubmitHandler = data => {
